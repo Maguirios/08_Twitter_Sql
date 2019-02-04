@@ -5,6 +5,7 @@ var tweetBank = require('../tweetBank');
 
 module.exports = router;
 
+
 // una función reusable
 function respondWithAllTweets (req, res, next){
   var allTheTweets = tweetBank.list();
@@ -44,6 +45,13 @@ router.post('/tweets', function(req, res, next){
   var newTweet = tweetBank.add(req.body.name, req.body.content);
   res.redirect('/');
 });
+
+client.query('SELECT * FROM tweets', function (err, result) {
+  if (err) return next(err); // pasa el error a Express
+  var tweets = result.rows;
+  res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
+});
+
 
 
 // // reemplazá esta ruta hard-codeada con static routing general en app.js
